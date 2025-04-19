@@ -7,13 +7,15 @@ struct Node {
   struct Node *next;
 };
 
-struct Node *head = NULL;
-struct Node *tail = NULL;
+typedef struct Node TNode;
+
+TNode *head = NULL;
+TNode *tail = NULL;
 
 bool isEmpty() { return (head == NULL) ? true : false; }
 
 void insertAtBegin(int nd) {
-  struct Node *temp = (struct Node *)malloc(sizeof(struct Node));
+  TNode *temp = (TNode *)malloc(sizeof(TNode));
   temp->data = nd;
   temp->next = NULL;
 
@@ -28,7 +30,7 @@ void insertAtBegin(int nd) {
 }
 
 void insertAtEnd(int nd) {
-  struct Node *temp = (struct Node *)malloc(sizeof(struct Node));
+  TNode *temp = (TNode *)malloc(sizeof(TNode));
   temp->data = nd;
   temp->next = NULL;
 
@@ -42,59 +44,21 @@ void insertAtEnd(int nd) {
   }
 }
 
-void deleteAtBegin() {
-  if (isEmpty())
-    return;
-  if (head == tail) {
-    free(head);
-    head = tail = NULL;
-    return;
-  }
-
-  struct Node *temp = head;
-  head = temp->next;
-
-  free(temp);
-  temp = NULL;
-}
-
-void deleteAtEnd() {
-  if (isEmpty())
-    return;
-  if (head == tail) {
-    free(head);
-    head = tail = NULL;
-    return;
-  }
-
-  struct Node *temp = head;
-  while (temp->next != tail) {
-    temp = temp->next;
-  }
-
-  tail = temp;
-  free(temp->next);
-  temp->next = NULL;
-}
-
 void printLL() {
-  if (isEmpty())
-    return;
-  struct Node *temp = head;
-  while (temp != NULL) {
+  TNode *temp = head;
+  while (temp->next != NULL) {
     printf("%d\n", temp->data);
     temp = temp->next;
   }
+
+  printf("%d\n", temp->data);
 }
 
 void freeLL() {
-  if (isEmpty())
-    return;
+  TNode *temp = head;
+  while (temp->next != NULL) {
 
-  struct Node *temp = head;
-  while (temp != NULL) {
-
-    struct Node *now = temp;
+    TNode *now = temp;
     temp = temp->next;
 
     free(now);
@@ -112,8 +76,6 @@ int main() {
   insertAtBegin(11);
   insertAtEnd(13);
   insertAtEnd(17);
-
-  deleteAtEnd();
 
   printLL();
   freeLL();

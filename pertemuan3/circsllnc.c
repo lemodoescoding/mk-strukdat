@@ -7,94 +7,108 @@ struct Node {
   struct Node *next;
 };
 
-struct Node *head = NULL;
-struct Node *tail = NULL;
+typedef struct Node TNode;
 
-bool isEmpty() { return (head == NULL) ? true : false; }
+TNode *head;
+TNode *tail;
+
+bool isEmptyLL() { return (head == NULL) ? true : false; }
 
 void insertAtBegin(int nd) {
-  struct Node *temp = (struct Node *)malloc(sizeof(struct Node));
+  TNode *temp = (TNode *)malloc(sizeof(TNode));
   temp->data = nd;
   temp->next = NULL;
 
-  if (isEmpty() == true) {
+  if (isEmptyLL() == true) {
     head = temp;
     tail = temp;
-    tail->next = NULL;
+    tail->next = temp;
   } else {
     temp->next = head;
     head = temp;
+    tail->next = head;
   }
 }
 
 void insertAtEnd(int nd) {
-  struct Node *temp = (struct Node *)malloc(sizeof(struct Node));
+  TNode *temp = (TNode *)malloc(sizeof(TNode));
   temp->data = nd;
   temp->next = NULL;
 
-  if (isEmpty() == true) {
+  if (isEmptyLL() == true) {
     head = temp;
     tail = temp;
-    tail->next = NULL;
+    tail->next = temp;
   } else {
     tail->next = temp;
     tail = temp;
+    temp->next = head;
   }
 }
 
 void deleteAtBegin() {
-  if (isEmpty())
+  if (isEmptyLL())
     return;
+
   if (head == tail) {
     free(head);
     head = tail = NULL;
     return;
   }
 
-  struct Node *temp = head;
-  head = temp->next;
+  TNode *temp = head;
+  tail->next = head->next;
+
+  head = head->next;
 
   free(temp);
-  temp = NULL;
 }
 
 void deleteAtEnd() {
-  if (isEmpty())
+  if (isEmptyLL())
     return;
+
   if (head == tail) {
     free(head);
     head = tail = NULL;
     return;
   }
 
-  struct Node *temp = head;
+  TNode *temp = head;
   while (temp->next != tail) {
     temp = temp->next;
   }
 
+  temp->next = tail->next;
+  free(tail);
+
   tail = temp;
-  free(temp->next);
-  temp->next = NULL;
 }
 
 void printLL() {
-  if (isEmpty())
+  if (isEmptyLL() == true)
     return;
-  struct Node *temp = head;
-  while (temp != NULL) {
+
+  TNode *temp = head;
+  while (temp->next != head) {
     printf("%d\n", temp->data);
     temp = temp->next;
   }
+
+  printf("%d\n", temp->data);
+  temp = NULL;
 }
 
 void freeLL() {
-  if (isEmpty())
+  if (isEmptyLL() == true)
     return;
 
-  struct Node *temp = head;
-  while (temp != NULL) {
+  tail->next = NULL;
 
-    struct Node *now = temp;
+  TNode *temp = head;
+  while (temp != NULL) {
+    TNode *now = temp;
+
     temp = temp->next;
 
     free(now);
@@ -105,13 +119,8 @@ void freeLL() {
 }
 
 int main() {
-  insertAtBegin(2);
-  insertAtBegin(3);
-  insertAtBegin(5);
-  insertAtBegin(7);
-  insertAtBegin(11);
-  insertAtEnd(13);
-  insertAtEnd(17);
+  insertAtEnd(33);
+  insertAtEnd(33);
 
   deleteAtEnd();
 

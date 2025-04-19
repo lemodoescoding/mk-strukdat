@@ -9,6 +9,7 @@ struct DynArray {
 };
 
 typedef struct DynArray DNumbers;
+typedef struct DynArray DChars; // just threat chars like integers
 
 bool isDynEmpty(struct DynArray *dn) { return (dn->_count == 0); }
 
