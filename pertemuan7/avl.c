@@ -129,6 +129,64 @@ void InsertToAVL(AVLTree *avl, int data) {
   avl->_size++;
 }
 
+AVLNode *_findMinNode(AVLNode *node) {
+  AVLNode *currNode = node;
+  while (currNode && currNode->_left != NULL)
+    currNode = currNode->_left;
+  return currNode;
+}
+
+AVLNode *_remove_AVL(AVLNode *node, int value) {
+  if (node == NULL)
+    return node;
+  if (value > node->_data)
+    node->_right = _remove_AVL(node->_right, value);
+  else if (value < node->_data)
+    node->_left = _remove_AVL(node->_left, value);
+  else {
+    AVLNode *temp;
+    if ((node->_left == NULL) || (node->_right == NULL)) {
+      temp = NULL;
+      if (node->_left == NULL)
+        temp = node->_right;
+      else if (node->_right == NULL)
+        temp = node->_left;
+
+      if (temp == NULL) {
+        temp = node;
+        node = NULL;
+      } else
+        *node = *temp;
+
+      free(temp);
+    } else {
+      temp = _findMinNode(node->_right);
+      node->_data = temp->_data;
+      node->_right = _remove_AVL(node->_right, temp->_data);
+    }
+  }
+  if (node == NULL)
+    return node;
+
+  node->_height = _max(_getHeight(node->_left), _getHeight(node->_right)) + 1;
+
+  int balanceFactor = _getBalanceFactor(node);
+
+  if (balanceFactor > 1 && _getBalanceFactor(node->_left) >= 0)
+    return leftCaseRotate(node);
+
+  if (balanceFactor > 1 && _getBalanceFactor(node->_left) < 0)
+    return leftRightCaseRotate(node);
+
+  if (balanceFactor < -1 && _getBalanceFactor(node->_right) <= 0)
+    return rightCaseRotate(node);
+
+  if (balanceFactor < -1 && _getBalanceFactor(node->_right) > 0)
+    return rightLeftCaseRotate(node);
+
+  return node;
+}
+
 void printPostOrder(AVLNode *node) {
   if (node == NULL)
     return;
