@@ -1,3 +1,5 @@
+#### [UPDATE] - The course has been finished by this July of 2025, so this will be the final update/commit to the repository, i got an A :-)
+
 # Codes i have wrote on Data Structure Course
 
 will be updated as soon as there is new assignment/practikum/seslab/remed
